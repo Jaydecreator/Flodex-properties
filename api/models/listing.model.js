@@ -34,10 +34,6 @@ const listingSchema = new mongoose.Schema(
             type: Boolean,
             required: true,
         },
-        squaremeters: {
-            type: Number,
-            required: true,
-        },
         parking: {
             type: Boolean,
             required: true,
