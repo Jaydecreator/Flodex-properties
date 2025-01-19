@@ -63,36 +63,70 @@ export const getListing = async (req, res, next) => {
 
 export const getListings = async (req, res, next) => {
   try {
+
+  //   const limit = parseInt(req.query.limit) || 9;
+  //   const startIndex = parseInt(req.query.startIndex) || 0;
+
+    // let offer = req.query.offer === 'true' ? true : req.query.offer === 'false' ? false : { $in: [true, false] };
+  //   let furnished = req.query.furnished === 'true' ? true : req.query.furnished === 'false' ? false : { $in: [true, false] };
+  //   let parking = req.query.parking === 'true' ? true : req.query.parking === 'false' ? false : { $in: [true, false] };
+  //   let type = req.query.type === 'all' ? { $in: ['sale', 'rent'] } : req.query.type;
+  //   const searchTerm = req.query.searchTerm || '';
+  //   const sort = req.query.sort || 'createdAt';
+  //   const order = req.query.order === 'asc' ? 1 : -1;
+
+  //   const filters = {
+  //     name: { $regex: searchTerm, $options: 'i' },
+  //     furnished,
+  //     parking,
+  //     offer,
+  //     ...(type && { type }),
+  //   };
+
+  //   const listings = await Listing.find(filters)
+  //     .sort({ [sort]: order })
+  //     .limit(limit)
+  //     .skip(startIndex);
+
+  //   res.status(200).json(listings);
+  // } catch (error) {
+  //   console.error('Error in getListings:', error);
+  //   next(error);
+  // }
+
+  //=================================================================
+
+
     const limit = parseInt(req.query.limit) || 9;
     const startIndex = parseInt(req.query.startIndex) || 0;
     
     let offer = req.query.offer;
-    if (offer == undefined || offer == false) {
+    if (offer === 'false' || offer === false) {
       offer = { $in: [true, false]};
     }
 
     let furnished = req.query.furnished;
-    if (furnished == undefined || furnished == false) {
+    if (furnished === 'false' || furnished === false) {
       furnished = {$in: [false, true]}
     }
 
     let parking = req.query.parking;
-    if (parking == undefined || parking == false) {
+    if (parking === 'false' || parking === false) {
       parking = {$in: [false, true]}
     }
     
     let type = req.query.type;
-    if (type== undefined || type== all) {
-      type= {$in: ['sale', 'rent']};
+    if (type === 'false' || type === 'all') {
+      type = {$in: ['sale', 'rent']}; 
     }
 
-    const searchTerm = req.query.searchTerm || '';
+    const searchTerm = req.query.searchTerm || '';              
 
     const sort = req.query.sort || 'createdAt';
 
     const order = req.query.order || 'desc';
 
-    const listing = await Listing.find({
+    const listings = await Listing.find({
       name: {$regex: searchTerm, $options: 'i'},
       furnished,
       parking,
@@ -102,7 +136,7 @@ export const getListings = async (req, res, next) => {
       {[sort]: order}
     ).limit(limit).skip(startIndex);
 
-    return res.status(200).json(listing)
+    return res.status(200).json(listings)
 
 
 
